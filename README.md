@@ -8,7 +8,7 @@ This is a [Middleman][] 3 template for building out TIY-branded slide decks with
 
 ## Installation
 
-1. Clone **middleman-impress** into `~/.middleman`.
+1. Clone **middleman-tiy-reveal** into `~/.middleman`.
    You will need to create this directory if it doesn't exist.
    ```bash
    $ git clone https://github.com/theironyard/middleman-tiy-reveal.git ~/.middleman/tiy-slides
@@ -17,6 +17,12 @@ This is a [Middleman][] 3 template for building out TIY-branded slide decks with
 2. Create a new project with the template:
    ```bash
    $ middleman init slides --template=tiy-slides
+   ```
+
+3. Change directories and install dependencies.
+   ```bash
+   $ cd slides
+   $ bundle install
    ```
 
 3. Start hacking away at `source/index.html.erb`.
