@@ -1,0 +1,98 @@
+@import "colors";
+
+pre code {
+  display: block; padding: 0.5em;
+  background: $base07;
+  color: $base01;
+}
+
+pre .comment,
+pre .template_comment,
+pre .diff .header,
+pre .doctype,
+pre .pi,
+pre .lisp .string,
+pre .javadoc {
+  color: $base03;
+}
+
+pre .keyword,
+pre .winutils,
+pre .method,
+pre .addition,
+pre .css .tag,
+pre .request,
+pre .status,
+pre .nginx .title {
+  color: $base0E;
+}
+
+pre .command,
+pre .tag .value,
+pre .phpdoc,
+pre .tex .formula,
+pre .hexcolor {
+  color: $base09;
+}
+
+pre .title,
+pre .localvars,
+pre .chunk,
+pre .decorator,
+pre .builtin,
+pre .built_in,
+pre .identifier,
+pre .title .keymethods,
+pre .vhdl .literal,
+pre .id {
+  color: $base0D;
+}
+
+pre .attribute,
+pre .instancevar,
+pre .lisp .body,
+pre .constant,
+pre .parent,
+pre .haskell .type {
+  color: $base08;
+}
+
+pre .preprocessor,
+pre .preprocessor .keyword,
+pre .shebang,
+pre .diff .change,
+pre .special,
+pre .keymethods,
+pre .attr_selector,
+pre .important,
+pre .cdata {
+  color: $base0A;
+}
+
+pre .string {
+  color: $base0B;
+  // background-color: $base06;
+}
+
+pre .symbol {
+  color: $base0B;
+}
+
+pre .number,
+pre .variable {
+  color: $base08;
+}
+
+pre .constant,
+pre .class .title {
+  color: $base09;
+}
+
+pre .regexp,
+pre .title {
+  color: $base0D;
+}
+
+pre .subst {
+  color: $base0F;
+}
