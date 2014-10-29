@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>Welcome to Middleman</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic|Ubuntu+Mono:400,700,400italic,700italic|Alegreya:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+    <link href="stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="stylesheets/all.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <div class="reveal">
+
+  <!-- Any section element inside of this container is displayed as a slide -->
+  <div class="slides">
+    <section>
+      <h1>What's New in <br/>Rails 4.2?</h1>
+      <h3>Houston Ruby Brigade | October 29, 2014</h3>
+      <p>
+        <small>Presented by Jesse Wolgamott. Reveal.js by <a href="http://hakim.se">Hakim El Hattab</a> /
+        TIY theme by Clinton Dreisbach</small>
+      </p>
+    </section>
+
+
+
+    <section data-markdown>
+      ## The List
+      * ActiveJob
+      * ActiveMailer Deliver Later
+      * GlobalID
+      * AdequateRecord
+      * Web Console
+      * Real Foreign Keys
+      * Better configs
+      * Nokogiri
+      * Responders
+      * Small Changes
+      * Upcoming
+    </section>
+
+    <section data-markdown>
+      # ActiveJob
+      * It's an API to handle Resque, Sidekiq, and DelayedJob, using 1 API.
+      * Then, Resque, Sidekiq, etc, would hook into Rails.
+
+      ```ruby
+      MyJob.perform_later(record)
+      MyJob.set(wait_until: Date.tomorrow.noon).perform_later(record)
+      ```
+
+      Verdict: It works, but you won't be able to use the super cool Sidekiq features if you use only Rails API.
+
+    </section>
+
+    <section data-markdown>
+      # ActiveMailer Deliver Later
+
+      ```ruby
+      Notifier.welcome(@user).deliver_now!
+      Notifier.welcome(User.first).deliver_later!(wait: 1.hour)
+      Notifier.welcome(User.first).deliver_later!(wait_until: 10.hours.from_now)
+      ```
+
+      Verdit: Fairly cool. Should start start using `deliver_later` or `deliver_now`
+    </section>
+
+    <section data-markdown>
+      # GlobalID
+
+      In the ActiveJob, notice we did this:
+
+      ```ruby
+      NameCapitalizerJob.perform_later(record)
+      #...
+      class NameCapitalizerJob < ActiveJob::Base
+        def perform(friend)
+          name = friend.name.capitalize
+          friend.update_attribute :name, name
+        end
+      end
+      ```
+
+      ### The record isn't stored; the GlobablID is stored.
+
+      ```ruby
+      gid = Friend.first.gid
+       => #<GlobalID:0x007fa9add041f8 ...>
+       ```
+
+      Verdit: I'm sure there will be issues here. But not having to pull the model out of the database for your job should save seconds.
+
+    </section>
+
+
+    <section data-markdown>
+      # AdequateRecord
+
+      Adequate Record is a set of refactorings that make Active Record find and find_by methods and some association queries upto 2x faster.
+
+      ```ruby
+      Post.find 1  # caches query pattern
+      Post.find 2  # uses the cached pattern
+      ```
+
+      ![img](http://tenderlovemaking.com/images/finder_ips.png)
+
+      Verdict: COOL, no change to your code.
+    </section>
+
+    <section data-markdown>
+      # Web Console
+
+      ![web-console](https://cloud.githubusercontent.com/assets/705116/3825939/7e284de0-1d5a-11e4-9896-81465a38da76.gif)
+
+      * Like better errors.
+      * Rails 4.1+ only (though a rails 3 exists)
+      * Can access http://127.0.0.1:3000/console for fun
+      * Did not work out of the box on a 4.1 app for me
+
+      Verdict: meh
+    </section>
+
+    <section data-markdown>
+      # Real Foreign Keys
+
+      ```ruby
+      add_foreign_key :articles, :authors
+      remove_foreign_key :accounts, column: :owner_id
+      ```
+
+      * mysql, mysql2 and postgresql only
+
+      Verdict: Should probably start using.
+    </section>
+
+    <section data-markdown>
+      # Better configs
+
+      ```ruby
+      add_foreign_key :articles, :authors
+      remove_foreign_key :accounts, column: :owner_id
+      ```
+
+      Verdict: By now, you live without and don't care.
+    </section>
+
+    <section data-markdown>
+      # No more 0.0.0.0
+
+      "Due to a change in Rack, rails server now listens on localhost instead of 0.0.0.0 by default.""
+
+      * :(
+      * Go to http://localhost:3000 instead
+
+      Verdict: :( :(
+    </section>
+
+    <section data-markdown>
+      # Nokogiri. Nokigiri Everywhere.
+
+      ![nookogiri-everywhere](http://m.memegen.com/pt022w.jpg)
+
+      * The HTML sanitizer now uses Loofah and Nokogiri.
+      * So all rails instances will need to install it.
+
+      Verdit: `brew install nokogiri`
+    </section>
+
+    <section data-markdown>
+      # Responders are gonzo
+
+      ```ruby
+      respond_to :json
+
+      #...
+      respond_to @unicorn
+      ```
+
+      Verdit: :( (responders gem)
+    </section>
+
+    <section data-markdown>
+      # Small Changes
+
+      * PostgreSQL adapter now supports the JSONB datatype in PostgreSQL 9.4+.
+      * ActiveRecord::Base#validate! that raises RecordInvalid if the record is invalid
+      * bin/rake db:purge task to empty the database for the current environment.
+      * Added support for #pretty_print in ActiveRecord::Base objects.
+      * PostgreSQL and SQLite adapters no longer add a default limit of 255 characters on string columns
+      * has_secure_password no longer disallows blank passwords
+
+      Verdit: :( (responders gem)
+    </section>
+
+    <section data-markdown>
+      # In da future (Rails 5.0)
+
+      * ActiveForm: https://github.com/rails/activeform (like reform. VERY LIKE it.)
+      * Ruby 2.2 only
+      * --skip-turbolinks
+      * The release target for Rails 5.0 is currently spring/summer of 2015.
+
+    </section>
+
+    <section data-markdown>
+      ## About the IronYard
+
+      ![bg](http://theironyard.com/images/home/home-academy.jpg)
+
+      ### Classes start Jan 5.
+    </section>
+  </div>
+</div>
+
+    <script src="javascripts/all.js" type="text/javascript"></script>
+  </body>
+</html>
